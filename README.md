@@ -1,1 +1,2 @@
-# simple-commerce-monorepo
+
+Simple Commerce Services with Monorepo Architecture

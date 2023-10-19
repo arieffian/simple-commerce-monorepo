@@ -1,0 +1,3 @@
+get:
+  $ref: "./../operations/users/get_users/operation.yml"
+  

@@ -1,0 +1,21 @@
+type: object
+description: User model.
+required:
+  - id
+  - name
+  - email
+  - creator
+  - status
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  email:
+    type: string
+  creator:
+    type: string
+  status:
+    type: string
+    enum: [disabled, active]
+
