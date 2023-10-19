@@ -1,11 +1,13 @@
 package validator
 
 import (
+	"context"
+
 	go_validator "github.com/go-playground/validator/v10"
 )
 
 type ValidatorService interface {
-	Validate(interface{}) error
+	Validate(ctx context.Context, i interface{}) error
 }
 
 type validatorService struct {
@@ -20,6 +22,6 @@ func NewValidatorService() ValidatorService {
 	}
 }
 
-func (v *validatorService) Validate(i interface{}) error {
+func (v *validatorService) Validate(ctx context.Context, i interface{}) error {
 	return v.validator.Struct(i)
 }

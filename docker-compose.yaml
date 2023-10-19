@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    restart: always
+  postgres-users:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./volumes/postgres/users:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=users
+      - POSTGRES_PASSWORD=users123
+      - POSTGRES_DB=users
+    restart: always
+  postgres-products:
+    image: postgres:alpine
+    ports:
+      - "6432:5432"
+    volumes:
+      - ./volumes/postgres/products:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=products
+      - POSTGRES_PASSWORD=products123
+      - POSTGRES_DB=products
+    restart: always
+  postgres-orders:
+    image: postgres:alpine
+    ports:
+      - "7432:5432"
+    volumes:
+      - ./volumes/postgres/orders:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=orders
+      - POSTGRES_PASSWORD=orders123
+      - POSTGRES_DB=orders
+    restart: always
+  postgres-payments:
+    image: postgres:alpine
+    ports:
+      - "8432:5432"
+    volumes:
+      - ./volumes/postgres/payments:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=payments
+      - POSTGRES_PASSWORD=payments123
+      - POSTGRES_DB=payments
+    restart: always

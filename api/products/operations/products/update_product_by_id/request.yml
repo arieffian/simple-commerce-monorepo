@@ -1,0 +1,28 @@
+type: object
+required:
+  - name
+  - sku
+  - description
+  - price
+  - qty
+  - creator
+  - status
+properties:
+  name:
+    type: string
+  sku:
+    type: string
+  description:
+    type: string
+  price:
+    type: integer
+    format: int32
+  qty:
+    type: integer
+    format: int32
+  creator:
+    type: string
+  status:
+    type: string
+    enum: [disabled, active]
+

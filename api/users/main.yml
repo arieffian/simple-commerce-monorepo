@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   version: 1.0.0-$REVISION
-  title: OpenAPI Definition for Kuncie Unified Platform.
+  title: OpenAPI Definition for Simple Commerce - Users service
   license:
     name: MIT
 servers:

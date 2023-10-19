@@ -1,0 +1,3 @@
+get:
+  $ref: "./../operations/products/get_products/operation.yml"
+  

@@ -1,0 +1,3 @@
+patch:
+  $ref: "./../operations/products/update_product_by_id/operation.yml"
+  
