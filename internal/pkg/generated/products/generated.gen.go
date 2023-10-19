@@ -99,6 +99,20 @@ type GetProductByIdResponse struct {
 	Message string   `json:"message"`
 }
 
+// GetProductBySKUResponse defines model for GetProductBySKUResponse.
+type GetProductBySKUResponse struct {
+	Code    int32    `json:"code"`
+	Data    *Product `json:"data,omitempty"`
+	Message string   `json:"message"`
+}
+
+// GetProductBySlugResponse defines model for GetProductBySlugResponse.
+type GetProductBySlugResponse struct {
+	Code    int32    `json:"code"`
+	Data    *Product `json:"data,omitempty"`
+	Message string   `json:"message"`
+}
+
 // GetProductsResponse defines model for GetProductsResponse.
 type GetProductsResponse struct {
 	Code    int32      `json:"code"`

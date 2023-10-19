@@ -65,6 +65,7 @@ func NewServer(ctx context.Context, cfg config.Config) (*Server, error) {
 		router, err := routers.NewUsersRouter(routers.NewUsersRouterParams{
 			Db:    dbClient,
 			Redis: redis,
+			Cfg:   cfg,
 		})
 		if err != nil {
 			return nil, err

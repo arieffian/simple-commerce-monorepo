@@ -185,7 +185,7 @@ func (h *userHandler) DeleteUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	err := h.userRepo.DeleteUserById(c.Context(), repositories.DeleteUserByIdParams{
-		ID: id,
+		UserId: id,
 	})
 
 	if err != nil {

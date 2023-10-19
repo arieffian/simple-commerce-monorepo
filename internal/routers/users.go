@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"github.com/arieffian/simple-commerces-monorepo/internal/config"
 	"github.com/arieffian/simple-commerces-monorepo/internal/handlers"
 	"github.com/arieffian/simple-commerces-monorepo/internal/middlewares"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
@@ -13,14 +14,13 @@ import (
 type userRouter struct {
 	healthcheck handlers.HealthcheckService
 	users       handlers.UserService
-	apiKey      string
+	cfg         config.Config
 }
 
 type NewUsersRouterParams struct {
-	Db        *gorm.DB
-	Redis     redis.RedisService
-	Validator validator.ValidatorService
-	APIKey    string
+	Db    *gorm.DB
+	Redis redis.RedisService
+	Cfg   config.Config
 }
 
 func NewUsersRouter(p NewUsersRouterParams) (*userRouter, error) {
@@ -41,12 +41,12 @@ func NewUsersRouter(p NewUsersRouterParams) (*userRouter, error) {
 	return &userRouter{
 		healthcheck: healthcheckHandler,
 		users:       userHandler,
-		apiKey:      p.APIKey,
+		cfg:         p.Cfg,
 	}, nil
 }
 
 func (r *userRouter) RegisterRoutes(routes *fiber.App) {
-	v1 := routes.Group("/api/v1").Use(middlewares.NewValidateAPIKey(r.apiKey))
+	v1 := routes.Group("/api/v1").Use(middlewares.NewValidateAPIKey(r.cfg.APIKey))
 	v1.Get("/healthcheck", r.healthcheck.HealthCheckHandler)
 
 	users := v1.Group("/users")

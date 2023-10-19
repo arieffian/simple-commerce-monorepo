@@ -2,8 +2,9 @@ package repositories
 
 import (
 	"context"
-	"strconv"
+	"fmt"
 
+	"github.com/arieffian/simple-commerces-monorepo/internal/config"
 	"github.com/arieffian/simple-commerces-monorepo/internal/models"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
 	redis_pkg "github.com/redis/go-redis/v9"
@@ -13,6 +14,7 @@ import (
 type userRepository struct {
 	db      *gorm.DB
 	redisDb redis.RedisService
+	cfg     config.Config
 }
 
 var _ UserInterface = (*userRepository)(nil)
@@ -26,7 +28,7 @@ type NewUserRepositoryParams struct {
 func (r *userRepository) GetUserById(ctx context.Context, p GetUserByIdParams) (*GetUserByIdResponse, error) {
 	var user models.User
 
-	cacheKey := "|user|id|" + p.UserId + "|"
+	cacheKey := fmt.Sprintf("|%s|id|%s|", r.cfg.Service, p.UserId)
 
 	err := r.redisDb.GetCache(ctx, cacheKey, &user)
 
@@ -38,7 +40,7 @@ func (r *userRepository) GetUserById(ctx context.Context, p GetUserByIdParams) (
 		if err := r.db.First(&user, "id = ? AND status <> deleted", p.UserId).Error; err != nil {
 			return nil, err
 		}
-		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, user, 0); err != nil {
+		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, user, r.cfg.CacheTTL); err != nil {
 			return nil, err
 		}
 	}
@@ -52,7 +54,7 @@ func (r *userRepository) GetUserById(ctx context.Context, p GetUserByIdParams) (
 func (r *userRepository) GetUsers(ctx context.Context, p GetUsersParams) (*GetUsersResponse, error) {
 	var users []models.User
 
-	cacheKey := "|users|offset|" + strconv.Itoa(p.Offset) + "|limit|" + strconv.Itoa(p.Limit) + "|"
+	cacheKey := fmt.Sprintf("|%s|offset|%d|limit|%d|", r.cfg.Service, p.Offset, p.Limit)
 
 	err := r.redisDb.GetCache(ctx, cacheKey, &users)
 
@@ -67,7 +69,7 @@ func (r *userRepository) GetUsers(ctx context.Context, p GetUsersParams) (*GetUs
 			return nil, err
 		}
 
-		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, users, 0); err != nil {
+		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, users, r.cfg.CacheTTL); err != nil {
 			return nil, err
 		}
 	}
@@ -116,7 +118,7 @@ func (r *userRepository) UpdateUserById(ctx context.Context, p UpdateUserByIdPar
 
 func (r *userRepository) DeleteUserById(ctx context.Context, p DeleteUserByIdParams) error {
 	user := models.User{
-		ID: p.ID,
+		ID: p.UserId,
 	}
 
 	err := r.db.Delete(&user).Error

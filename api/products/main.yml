@@ -13,6 +13,10 @@ paths:
     $ref: "./paths/get_products.yml"
   /get-product-by-id/{id}:
     $ref: "./paths/get_product_by_id.yml"
+  /get-product-by-sku/{sku}:
+    $ref: "./paths/get_product_by_sku.yml"
+  /get-product-by-slug/{slug}:
+    $ref: "./paths/get_product_by_slug.yml"
   /create-product:
     $ref: "./paths/create_new_product.yml"
   /update-product-by-id/{id}:
