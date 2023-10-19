@@ -1,0 +1,3 @@
+post:
+  $ref: "./../operations/users/create_new_user/operation.yml"
+  

@@ -1,0 +1,3 @@
+delete:
+  $ref: "./../operations/users/delete_user_by_id/operation.yml"
+  

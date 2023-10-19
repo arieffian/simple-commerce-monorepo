@@ -1,0 +1,38 @@
+summary: Update User By ID - Put
+description: "Update User By ID - Put"
+security:
+  - ApiKeyAuth: []
+operationId: PutUpdateUserById
+tags:
+  - users
+parameters:
+  - name: id
+    in: path
+    description: User ID
+    required: true
+    schema:
+      type: string
+requestBody:
+  description: Update User By ID
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "./request.yml"
+responses:
+  "200":
+    description: Success Request
+    content:
+      application/json:
+        schema:
+          $ref: "./response.yml"
+  "400":
+    $ref: "./../../../responses/errors/400-bad-request-error.yml"
+  "401":
+    $ref: "./../../../responses/errors/401-unauthorized-error.yml"
+  "403":
+    $ref: "./../../../responses/errors/401-unauthorized-error.yml"
+  "500":
+    $ref: "./../../../responses/errors/500-internal-server-error.yml"
+  default:
+    $ref: "./../../../responses/errors/unexpected-error.yml"

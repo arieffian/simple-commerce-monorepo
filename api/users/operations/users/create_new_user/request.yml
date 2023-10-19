@@ -1,0 +1,17 @@
+type: object
+required:
+  - name
+  - email
+  - creator
+  - status
+properties:
+  name:
+    type: string
+  email:
+    type: string
+  creator:
+    type: string
+  status:
+    type: string
+    enum: [disabled, active]
+
