@@ -1,0 +1,3 @@
+delete:
+  $ref: "./../operations/products/delete_product_by_id/operation.yml"
+  

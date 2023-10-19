@@ -1,0 +1,66 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "simple-commerces",
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "endpoints": [
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/users/get-user-by-id/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{page}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/users/get-users/{page}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    }
+  ]
+}

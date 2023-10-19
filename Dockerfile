@@ -1,7 +1,7 @@
 FROM golang:1.20-alpine as builder
 RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
 RUN adduser -D -g '' appuser
-WORKDIR $GOPATH/src/github.com/arieffian/go-boilerplate
+WORKDIR $GOPATH/src/github.com/arieffian/simple-commerces-monorepo
 COPY . .
 #RUN go mod vendor
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /cmd/app/main

@@ -1,0 +1,37 @@
+type: object
+required:
+  - id
+  - slug
+  - name
+  - sku
+  - description
+  - price
+  - qty
+  - creator
+  - updater
+  - status
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  slug:
+    type: string
+  sku:
+    type: string
+  description:
+    type: string
+  price:
+    type: integer
+    format: int32
+  qty:
+    type: integer
+    format: int32
+  creator:
+    type: string
+  updater:
+    type: string
+  status:
+    type: string
+    enum: [disabled, active]
+

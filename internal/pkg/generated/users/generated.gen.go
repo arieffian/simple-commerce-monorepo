@@ -156,11 +156,11 @@ type UnexpectedError = ErrorUnexpected
 // CreateNewUserJSONBody defines parameters for CreateNewUser.
 type CreateNewUserJSONBody = CreateNewUserRequest
 
-// PutUpdateUserByIdJSONBody defines parameters for PutUpdateUserById.
-type PutUpdateUserByIdJSONBody = UpdateUserByIdRequest
+// UpdateUserByIdJSONBody defines parameters for UpdateUserById.
+type UpdateUserByIdJSONBody = UpdateUserByIdRequest
 
 // CreateNewUserJSONRequestBody defines body for CreateNewUser for application/json ContentType.
 type CreateNewUserJSONRequestBody = CreateNewUserJSONBody
 
-// PutUpdateUserByIdJSONRequestBody defines body for PutUpdateUserById for application/json ContentType.
-type PutUpdateUserByIdJSONRequestBody = PutUpdateUserByIdJSONBody
+// UpdateUserByIdJSONRequestBody defines body for UpdateUserById for application/json ContentType.
+type UpdateUserByIdJSONRequestBody = UpdateUserByIdJSONBody

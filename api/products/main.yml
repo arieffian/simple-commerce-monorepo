@@ -1,0 +1,34 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0-$REVISION
+  title: OpenAPI Definition for Simple Commerce - Products service
+  license:
+    name: MIT
+servers:
+  - url: https://arieffian.com/api/v1
+    description: development server
+paths:
+  # Products
+  /get-products/{page}:
+    $ref: "./paths/get_products.yml"
+  /get-product-by-id/{id}:
+    $ref: "./paths/get_product_by_id.yml"
+  /create-product:
+    $ref: "./paths/create_new_product.yml"
+  /update-product-by-id/{id}:
+    $ref: "./paths/update_product_by_id.yml"
+  /delete-product-by-id/{id}:
+    $ref: "./paths/delete_product_by_id.yml"
+
+components:
+  schemas:
+    $ref: "./schemas/_main.yml"
+  responses:
+    $ref: "./responses/_main.yml"
+  parameters:
+    $ref: "./parameters/_main.yml"
+  securitySchemes:
+    $ref: "./security-schemes/_main.yml"
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []

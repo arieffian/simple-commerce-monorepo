@@ -1,0 +1,2 @@
+post:
+  $ref: "./../operations/products/create_new_product/operation.yml"

@@ -5,8 +5,9 @@ set -e
 
 SERVICES=(
     "users"
-    # "products"
-    # "transactions"
+    "products"
+    # "orders"
+    # "payments"
 )
 
 for SERVICE_NAME in ${SERVICES[@]}; do

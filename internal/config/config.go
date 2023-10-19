@@ -1,23 +1,27 @@
 package config
 
 import (
+	"context"
 	"errors"
 	"os"
 
+	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/validator"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Environment               string `mapstructure:"ENVIRONMENT"`
-	Debug                     bool   `mapstructure:"DEBUG"`
-	DbMasterConnectionString  string `mapstructure:"DB_MASTER_CONNECTION_STRING"`
+	Environment               string `mapstructure:"ENVIRONMENT" validate:"required"`
+	Debug                     bool   `mapstructure:"DEBUG" validate:"required"`
+	DbMasterConnectionString  string `mapstructure:"DB_MASTER_CONNECTION_STRING" validate:"required"`
 	DbReplicaConnectionString string `mapstructure:"DB_REPLICA_CONNECTION_STRING"`
-	APIAddress                string `mapstructure:"API_ADDRESS"`
+	APIAddress                string `mapstructure:"API_ADDRESS" validate:"required"`
 	RedisHost                 string `mapstructure:"REDIS_HOST"`
 	RedisPort                 int    `mapstructure:"REDIS_PORT"`
 	CacheTTL                  int    `mapstructure:"CACHE_TTL"`
-	APIKey                    string `mapstructure:"API_KEY"`
+	APIKey                    string `mapstructure:"API_KEY" validate:"required"`
+	DBDriver                  string `mapstructure:"DB_DRIVER" validate:"required"`
+	Service                   string `mapstructure:"SERVICE" validate:"required"`
 }
 
 func NewConfig() (*Config, error) {
@@ -40,11 +44,16 @@ func NewConfig() (*Config, error) {
 	}
 
 	cfg := Config{}
-	err = viper.Unmarshal(&cfg)
-
-	if err != nil {
+	if err := viper.Unmarshal(&cfg); err != nil {
 		log.Printf("Failed to load env variables. %+v\n", err)
 		return nil, err
 	}
+
+	v := validator.NewValidatorService()
+	if err := v.Validate(context.Background(), cfg); err != nil {
+		log.Printf("Failed to validate config. %+v\n", err)
+		return nil, err
+	}
+
 	return &cfg, nil
 }

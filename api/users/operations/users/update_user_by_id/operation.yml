@@ -1,8 +1,8 @@
-summary: Update User By ID - Put
-description: "Update User By ID - Put"
+summary: Update User By ID
+description: "Update User By ID"
 security:
   - ApiKeyAuth: []
-operationId: PutUpdateUserById
+operationId: UpdateUserById
 tags:
   - users
 parameters:

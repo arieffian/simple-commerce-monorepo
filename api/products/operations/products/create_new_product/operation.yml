@@ -1,0 +1,31 @@
+summary: Create New Product
+description: "Create New Product"
+security:
+  - ApiKeyAuth: []
+operationId: CreateNewProduct
+tags:
+  - products
+requestBody:
+  description: Create New Product
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: "./request.yml"
+responses:
+  "200":
+    description: Success Request
+    content:
+      application/json:
+        schema:
+          $ref: "./response.yml"
+  "400":
+    $ref: "./../../../responses/errors/400-bad-request-error.yml"
+  "401":
+    $ref: "./../../../responses/errors/401-unauthorized-error.yml"
+  "403":
+    $ref: "./../../../responses/errors/401-unauthorized-error.yml"
+  "500":
+    $ref: "./../../../responses/errors/500-internal-server-error.yml"
+  default:
+    $ref: "./../../../responses/errors/unexpected-error.yml"

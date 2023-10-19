@@ -1,0 +1,43 @@
+###########################################################################
+# Basic Schemas
+#####################################
+Product:
+  $ref: "./common/product.yml"
+
+###########################################################################
+# Errors Schemas
+###########################################################################
+ErrorBadRequest:
+  $ref: "./errors/400/response.yml"
+ErrorUnauthorized:
+  $ref: "./errors/401/response.yml"
+ErrorForbidden:
+  $ref: "./errors/403/response.yml"
+ErrorNotFound:
+  $ref: "./errors/404/response.yml"
+ErrorInternalServer:
+  $ref: "./errors/500/response.yml"
+ErrorUnexpected:
+  $ref: "./errors/unexpected/response.yml"
+###########################################################################
+# Category: products
+###########################################################################
+
+GetProductByIdResponse:
+  $ref: "./../operations/products/get_product_by_id/response.yml"
+
+GetProductsResponse:
+  $ref: "./../operations/products/get_products/response.yml"
+
+DeleteProductByIdResponse:
+  $ref: "./../operations/products/delete_product_by_id/response.yml"
+
+CreateNewProductRequest:
+  $ref: "./../operations/products/create_new_product/request.yml"
+CreateNewProductResponse:
+  $ref: "./../operations/products/create_new_product/response.yml"
+
+UpdateProductByIdRequest:
+  $ref: "./../operations/products/update_product_by_id/request.yml"
+UpdateProductByIdResponse:
+  $ref: "./../operations/products/update_product_by_id/response.yml"
