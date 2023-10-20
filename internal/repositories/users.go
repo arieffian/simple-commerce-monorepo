@@ -5,14 +5,14 @@ import (
 	"fmt"
 
 	"github.com/arieffian/simple-commerces-monorepo/internal/config"
+	"github.com/arieffian/simple-commerces-monorepo/internal/database"
 	"github.com/arieffian/simple-commerces-monorepo/internal/models"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
 	redis_pkg "github.com/redis/go-redis/v9"
-	"gorm.io/gorm"
 )
 
 type userRepository struct {
-	db      *gorm.DB
+	db      *database.DbInstance
 	redisDb redis.RedisService
 	cfg     config.Config
 }
@@ -20,8 +20,9 @@ type userRepository struct {
 var _ UserInterface = (*userRepository)(nil)
 
 type NewUserRepositoryParams struct {
-	Db    *gorm.DB
+	Db    *database.DbInstance
 	Redis redis.RedisService
+	Cfg   config.Config
 }
 
 // todo: check cache is enabled or not
@@ -37,7 +38,7 @@ func (r *userRepository) GetUserById(ctx context.Context, p GetUserByIdParams) (
 			return nil, err
 		}
 
-		if err := r.db.First(&user, "id = ? AND status <> deleted", p.UserId).Error; err != nil {
+		if err := r.db.Db.First(&user, "id = ? AND status <> deleted", p.UserId).Error; err != nil {
 			return nil, err
 		}
 		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, user, r.cfg.CacheTTL); err != nil {
@@ -63,7 +64,7 @@ func (r *userRepository) GetUsers(ctx context.Context, p GetUsersParams) (*GetUs
 			return nil, err
 		}
 
-		err := r.db.Model(&models.User{}).Limit(p.Limit).Offset(p.Offset).Find(&users).Error
+		err := r.db.Db.Model(&models.User{}).Limit(p.Limit).Offset(p.Offset).Find(&users).Error
 
 		if err != nil {
 			return nil, err
@@ -85,9 +86,10 @@ func (r *userRepository) CreateNewUser(ctx context.Context, p CreateNewUserParam
 		Email:     p.Email,
 		Status:    p.Status,
 		CreatedBy: p.CreatedBy,
+		Type:      p.Type,
 	}
 
-	err := r.db.Create(&user).Error
+	err := r.db.Db.Create(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -104,9 +106,10 @@ func (r *userRepository) UpdateUserById(ctx context.Context, p UpdateUserByIdPar
 		Email:     p.Email,
 		Status:    p.Status,
 		UpdatedBy: p.UpdatedBy,
+		Type:      p.Type,
 	}
 
-	err := r.db.Model(&models.User{}).Updates(&user).Error
+	err := r.db.Db.Model(&models.User{}).Updates(&user).Error
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +124,7 @@ func (r *userRepository) DeleteUserById(ctx context.Context, p DeleteUserByIdPar
 		ID: p.UserId,
 	}
 
-	err := r.db.Delete(&user).Error
+	err := r.db.Db.Delete(&user).Error
 	if err != nil {
 		return err
 	}
@@ -134,5 +137,6 @@ func NewUserRepository(p NewUserRepositoryParams) *userRepository {
 	return &userRepository{
 		db:      p.Db,
 		redisDb: p.Redis,
+		cfg:     p.Cfg,
 	}
 }

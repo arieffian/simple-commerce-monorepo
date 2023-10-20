@@ -14,11 +14,15 @@ type Product struct {
 	Slug        string     `json:"slug" gorm:"column:slug"`
 	SKU         string     `json:"sku" gorm:"column:sku"`
 	Description string     `json:"description" gorm:"column:description"`
-	Price       int64      `json:"price" gorm:"column:price"`
-	Qty         int        `json:"qty" gorm:"column:qty"`
+	Price       uint64     `json:"price" gorm:"column:price"`
+	Qty         uint       `json:"qty" gorm:"column:qty"`
 	Status      string     `json:"status" gorm:"column:status"`
 	CreatedBy   string     `json:"created_by" gorm:"column:created_by"`
 	UpdatedBy   string     `json:"updated_by" gorm:"column:updated_by"`
 	CreatedAt   time.Time  `json:"created_at" gorm:"column:created_at"`
 	UpdatedAt   *time.Time `json:"updated_at" gorm:"column:updated_at"`
+}
+
+func (Product) TableName() string {
+	return "products"
 }

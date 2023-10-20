@@ -2,13 +2,13 @@ package routers
 
 import (
 	"github.com/arieffian/simple-commerces-monorepo/internal/config"
+	"github.com/arieffian/simple-commerces-monorepo/internal/database"
 	"github.com/arieffian/simple-commerces-monorepo/internal/handlers"
 	"github.com/arieffian/simple-commerces-monorepo/internal/middlewares"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/validator"
 	"github.com/arieffian/simple-commerces-monorepo/internal/repositories"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 type userRouter struct {
@@ -18,7 +18,7 @@ type userRouter struct {
 }
 
 type NewUsersRouterParams struct {
-	Db    *gorm.DB
+	Db    *database.DbInstance
 	Redis redis.RedisService
 	Cfg   config.Config
 }
@@ -30,12 +30,14 @@ func NewUsersRouter(p NewUsersRouterParams) (*userRouter, error) {
 	userRepo := repositories.NewUserRepository(repositories.NewUserRepositoryParams{
 		Db:    p.Db,
 		Redis: p.Redis,
+		Cfg:   p.Cfg,
 	})
 
 	healthcheckHandler := handlers.NewHealthCheckHandler()
 	userHandler := handlers.NewUserHandler(handlers.NewUserHandlerParams{
 		UserRepo:  userRepo,
 		Validator: validator,
+		Cfg:       p.Cfg,
 	})
 
 	return &userRouter{

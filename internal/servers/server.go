@@ -10,7 +10,6 @@ import (
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
 	"github.com/arieffian/simple-commerces-monorepo/internal/routers"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 type Server struct {
@@ -24,7 +23,7 @@ func NewServer(ctx context.Context, cfg config.Config) (*Server, error) {
 		ReadDsn:  cfg.DbReplicaConnectionString,
 	})
 
-	var dbClient *gorm.DB
+	var dbClient *database.DbInstance
 	switch cfg.DBDriver {
 	case "sqlite":
 		client, err := db.CreateDbSqliteClient(ctx)
@@ -52,6 +51,7 @@ func NewServer(ctx context.Context, cfg config.Config) (*Server, error) {
 		return nil, errors.New("Failed to connect to database. empty driver")
 	}
 
+	// todo: check config cache is enabled or not
 	redis := redis.NewRedisConnection(redis.RedisConfig{
 		Host: cfg.RedisHost,
 		Port: cfg.RedisPort,
@@ -75,6 +75,7 @@ func NewServer(ctx context.Context, cfg config.Config) (*Server, error) {
 		router, err := routers.NewProductsRouter(routers.NewProductsRouterParams{
 			Db:    dbClient,
 			Redis: redis,
+			Cfg:   cfg,
 		})
 		if err != nil {
 			return nil, err

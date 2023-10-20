@@ -12,6 +12,7 @@ type User struct {
 	ID        string     `json:"id" gorm:"primaryKey,column:id"`
 	Name      string     `json:"name" gorm:"column:name"`
 	Email     string     `json:"email" gorm:"column:email"`
+	Type      string     `json:"type" gorm:"column:type"`
 	Status    string     `json:"status" gorm:"column:status"`
 	CreatedBy string     `json:"created_by" gorm:"column:created_by"`
 	UpdatedBy string     `json:"updated_by" gorm:"column:updated_by"`
@@ -20,4 +21,8 @@ type User struct {
 
 	Creator *User `gorm:"foreignKey:CreatedBy;references:ID"`
 	Updater *User `gorm:"foreignKey:UpdatedBy;references:ID"`
+}
+
+func (User) TableName() string {
+	return "users"
 }

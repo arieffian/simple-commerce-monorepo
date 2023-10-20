@@ -5,23 +5,27 @@ import (
 	"fmt"
 
 	"github.com/arieffian/simple-commerces-monorepo/internal/config"
+	"github.com/arieffian/simple-commerces-monorepo/internal/database"
 	"github.com/arieffian/simple-commerces-monorepo/internal/models"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
+	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/slug"
 	redis_pkg "github.com/redis/go-redis/v9"
-	"gorm.io/gorm"
 )
 
 type productRepository struct {
-	db      *gorm.DB
-	redisDb redis.RedisService
-	cfg     config.Config
+	db            *database.DbInstance
+	redisDb       redis.RedisService
+	cfg           config.Config
+	slugGenerator slug.SlugGeneratorService
 }
 
 var _ ProductInterface = (*productRepository)(nil)
 
 type NewProductRepositoryParams struct {
-	Db    *gorm.DB
-	Redis redis.RedisService
+	Db            *database.DbInstance
+	Redis         redis.RedisService
+	Cfg           config.Config
+	SlugGenerator slug.SlugGeneratorService
 }
 
 func (r *productRepository) GetProductById(ctx context.Context, p GetProductByIdParams) (*GetProductByIdResponse, error) {
@@ -36,7 +40,7 @@ func (r *productRepository) GetProductById(ctx context.Context, p GetProductById
 			return nil, err
 		}
 
-		if err := r.db.First(&product, "id = ? AND status <> deleted", p.ProductId).Error; err != nil {
+		if err := r.db.Db.First(&product, "id = ? AND status <> deleted", p.ProductId).Error; err != nil {
 			return nil, err
 		}
 		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, product, r.cfg.CacheTTL); err != nil {
@@ -61,7 +65,7 @@ func (r *productRepository) GetProductBySKU(ctx context.Context, p GetProductByS
 			return nil, err
 		}
 
-		if err := r.db.First(&product, "sku = ? AND status <> deleted", p.ProductSKU).Error; err != nil {
+		if err := r.db.Db.First(&product, "sku = ? AND status <> deleted", p.ProductSKU).Error; err != nil {
 			return nil, err
 		}
 		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, product, r.cfg.CacheTTL); err != nil {
@@ -86,7 +90,7 @@ func (r *productRepository) GetProductBySlug(ctx context.Context, p GetProductBy
 			return nil, err
 		}
 
-		if err := r.db.First(&product, "slug = ? AND status <> deleted", p.ProductSlug).Error; err != nil {
+		if err := r.db.Db.First(&product, "slug = ? AND status <> deleted", p.ProductSlug).Error; err != nil {
 			return nil, err
 		}
 		if err := r.redisDb.SetCacheWithExpiration(context.Background(), cacheKey, product, r.cfg.CacheTTL); err != nil {
@@ -112,7 +116,7 @@ func (r *productRepository) GetProducts(ctx context.Context, p GetProductsParams
 			return nil, err
 		}
 
-		err := r.db.Model(&models.Product{}).Limit(p.Limit).Offset(p.Offset).Find(&products).Error
+		err := r.db.Db.Model(&models.Product{}).Limit(p.Limit).Offset(p.Offset).Find(&products).Error
 
 		if err != nil {
 			return nil, err
@@ -128,49 +132,61 @@ func (r *productRepository) GetProducts(ctx context.Context, p GetProductsParams
 	}, nil
 }
 
-// func (r *userRepository) CreateNewUser(ctx context.Context, p CreateNewUserParams) (*CreateNewUserResponse, error) {
-// 	user := models.User{
-// 		Name:      p.Name,
-// 		Email:     p.Email,
-// 		Status:    p.Status,
-// 		CreatedBy: p.CreatedBy,
-// 	}
+func (r *productRepository) CreateNewProduct(ctx context.Context, p CreateNewProductParams) (*CreateNewProductResponse, error) {
+	product := models.Product{
+		Name:        p.Name,
+		SKU:         p.SKU,
+		Price:       p.Price,
+		Qty:         p.Qty,
+		Status:      p.Status,
+		Description: p.Description,
+		CreatedBy:   p.CreatedBy,
+	}
 
-// 	err := r.db.Create(&user).Error
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	slug, err := r.slugGenerator.GenerateUniqueSlug(ctx, p.Name, "products", "slug")
+	if err != nil {
+		return nil, err
+	}
 
-// 	return &CreateNewUserResponse{
-// 		User: user,
-// 	}, nil
-// }
+	product.Slug = slug
 
-// func (r *userRepository) UpdateUserById(ctx context.Context, p UpdateUserByIdParams) (*UpdateUserByIdResponse, error) {
-// 	user := models.User{
-// 		ID:        p.ID,
-// 		Name:      p.Name,
-// 		Email:     p.Email,
-// 		Status:    p.Status,
-// 		UpdatedBy: p.UpdatedBy,
-// 	}
+	err = r.db.Db.Create(&product).Error
+	if err != nil {
+		return nil, err
+	}
 
-// 	err := r.db.Model(&models.User{}).Updates(&user).Error
-// 	if err != nil {
-// 		return nil, err
-// 	}
+	return &CreateNewProductResponse{
+		Product: product,
+	}, nil
+}
 
-// 	return &UpdateUserByIdResponse{
-// 		User: user,
-// 	}, nil
-// }
+func (r *productRepository) UpdateProductById(ctx context.Context, p UpdateProductByIdParams) (*UpdateProductByIdResponse, error) {
+	product := models.Product{
+		Name:        p.Name,
+		SKU:         p.SKU,
+		Price:       p.Price,
+		Qty:         p.Qty,
+		Status:      p.Status,
+		Description: p.Description,
+		UpdatedBy:   p.UpdatedBy,
+	}
+
+	err := r.db.Db.Model(&models.Product{}).Updates(&product).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &UpdateProductByIdResponse{
+		Product: product,
+	}, nil
+}
 
 func (r *productRepository) DeleteProductById(ctx context.Context, p DeleteProductByIdParams) error {
 	product := models.Product{
 		ID: p.ProductId,
 	}
 
-	err := r.db.Delete(&product).Error
+	err := r.db.Db.Delete(&product).Error
 	if err != nil {
 		return err
 	}
@@ -181,7 +197,9 @@ func (r *productRepository) DeleteProductById(ctx context.Context, p DeleteProdu
 func NewProductRepository(p NewProductRepositoryParams) *productRepository {
 
 	return &productRepository{
-		db:      p.Db,
-		redisDb: p.Redis,
+		db:            p.Db,
+		redisDb:       p.Redis,
+		cfg:           p.Cfg,
+		slugGenerator: p.SlugGenerator,
 	}
 }

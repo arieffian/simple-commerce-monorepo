@@ -13,10 +13,22 @@ const (
 	CreateNewUserRequestStatusDisabled CreateNewUserRequestStatus = "disabled"
 )
 
+// Defines values for CreateNewUserRequestType.
+const (
+	CreateNewUserRequestTypeAdmin    CreateNewUserRequestType = "admin"
+	CreateNewUserRequestTypeCustomer CreateNewUserRequestType = "customer"
+)
+
 // Defines values for UpdateUserByIdRequestStatus.
 const (
 	UpdateUserByIdRequestStatusActive   UpdateUserByIdRequestStatus = "active"
 	UpdateUserByIdRequestStatusDisabled UpdateUserByIdRequestStatus = "disabled"
+)
+
+// Defines values for UpdateUserByIdRequestType.
+const (
+	UpdateUserByIdRequestTypeAdmin    UpdateUserByIdRequestType = "admin"
+	UpdateUserByIdRequestTypeCustomer UpdateUserByIdRequestType = "customer"
 )
 
 // Defines values for UserStatus.
@@ -25,16 +37,26 @@ const (
 	Disabled UserStatus = "disabled"
 )
 
+// Defines values for UserType.
+const (
+	Admin    UserType = "admin"
+	Customer UserType = "customer"
+)
+
 // CreateNewUserRequest defines model for CreateNewUserRequest.
 type CreateNewUserRequest struct {
 	Creator string                     `json:"creator"`
 	Email   string                     `json:"email"`
 	Name    string                     `json:"name"`
 	Status  CreateNewUserRequestStatus `json:"status"`
+	Type    CreateNewUserRequestType   `json:"type"`
 }
 
 // CreateNewUserRequestStatus defines model for CreateNewUserRequest.Status.
 type CreateNewUserRequestStatus string
+
+// CreateNewUserRequestType defines model for CreateNewUserRequest.Type.
+type CreateNewUserRequestType string
 
 // CreateNewUserResponse defines model for CreateNewUserResponse.
 type CreateNewUserResponse struct {
@@ -115,10 +137,14 @@ type UpdateUserByIdRequest struct {
 	Email   string                      `json:"email"`
 	Name    string                      `json:"name"`
 	Status  UpdateUserByIdRequestStatus `json:"status"`
+	Type    UpdateUserByIdRequestType   `json:"type"`
 }
 
 // UpdateUserByIdRequestStatus defines model for UpdateUserByIdRequest.Status.
 type UpdateUserByIdRequestStatus string
+
+// UpdateUserByIdRequestType defines model for UpdateUserByIdRequest.Type.
+type UpdateUserByIdRequestType string
 
 // UpdateUserByIdResponse defines model for UpdateUserByIdResponse.
 type UpdateUserByIdResponse struct {
@@ -136,10 +162,14 @@ type User struct {
 	Id      string     `json:"id"`
 	Name    string     `json:"name"`
 	Status  UserStatus `json:"status"`
+	Type    UserType   `json:"type"`
 }
 
 // UserStatus defines model for User.Status.
 type UserStatus string
+
+// UserType defines model for User.Type.
+type UserType string
 
 // BadRequestError defines model for BadRequestError.
 type BadRequestError = ErrorBadRequest

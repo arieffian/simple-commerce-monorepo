@@ -1,0 +1,3 @@
+ALTER TABLE users DROP COLUMN IF EXISTS type;
+
+DROP INDEX IF EXISTS users_type_idx;

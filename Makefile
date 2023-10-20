@@ -23,6 +23,7 @@ tools: ## get tools
 generate-mocks: ## generate mocks
 	mockgen -package=mock_redis -source internal/pkg/redis/redis.go -destination=internal/pkg/redis/mocks/redis_mock.go
 	mockgen -package=mock_validator -source internal/pkg/validator/validator.go -destination=internal/pkg/validator/mocks/validator_mock.go
+	mockgen -package=mock_slug -source internal/pkg/slug/generator.go -destination=internal/pkg/slug/mocks/generator_mock.go
 
 .PHONY: generate-api-schema
 generate-api-schema: ## generate api schema using swagger
