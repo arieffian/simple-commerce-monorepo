@@ -27,6 +27,7 @@ type CreateNewUserParams struct {
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	Status    string `json:"status"`
+	Type      string `json:"type"`
 	CreatedBy string `json:"created_by"`
 }
 
@@ -39,6 +40,7 @@ type UpdateUserByIdParams struct {
 	Name      string `json:"name"`
 	Email     string `json:"email"`
 	Status    string `json:"status"`
+	Type      string `json:"type"`
 	UpdatedBy string `json:"updated_by"`
 }
 
@@ -47,7 +49,7 @@ type UpdateUserByIdResponse struct {
 }
 
 type DeleteUserByIdParams struct {
-	ID string `json:"id"`
+	UserId string `json:"user_id"`
 }
 
 type UserInterface interface {
@@ -66,6 +68,22 @@ type GetProductByIdResponse struct {
 	Product models.Product
 }
 
+type GetProductBySlugParams struct {
+	ProductSlug string
+}
+
+type GetProductBySlugResponse struct {
+	Product models.Product
+}
+
+type GetProductBySKUParams struct {
+	ProductSKU string
+}
+
+type GetProductBySKUResponse struct {
+	Product models.Product
+}
+
 type GetProductsParams struct {
 	Limit  int
 	Offset int
@@ -75,10 +93,45 @@ type GetProductsResponse struct {
 	Products []models.Product
 }
 
+type CreateNewProductParams struct {
+	Name        string `json:"name"`
+	SKU         string `json:"sku"`
+	Price       uint64 `json:"price"`
+	Qty         uint   `json:"qty"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	CreatedBy   string `json:"created_by"`
+}
+
+type CreateNewProductResponse struct {
+	Product models.Product
+}
+
+type UpdateProductByIdParams struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	SKU         string `json:"sku"`
+	Price       uint64 `json:"price"`
+	Qty         uint   `json:"qty"`
+	Description string `json:"description"`
+	Status      string `json:"status"`
+	UpdatedBy   string `json:"updated_by"`
+}
+
+type UpdateProductByIdResponse struct {
+	Product models.Product
+}
+
+type DeleteProductByIdParams struct {
+	ProductId string `json:"product_id"`
+}
+
 type ProductInterface interface {
 	GetProductById(ctx context.Context, p GetProductByIdParams) (*GetProductByIdResponse, error)
-	// GetProducts(ctx context.Context, p GetProductsParams) (*GetProductsResponse, error)
-	// CreateNewProduct(ctx context.Context, p CreateNewProductParams) (*CreateNewProductResponse, error)
-	// UpdateProductById(ctx context.Context, p UpdateProductByIdParams) (*UpdateProductByIdResponse, error)
-	// DeleteProductById(ctx context.Context, p DeleteProductByIdParams) error
+	GetProductBySKU(ctx context.Context, p GetProductBySKUParams) (*GetProductBySKUResponse, error)
+	GetProductBySlug(ctx context.Context, p GetProductBySlugParams) (*GetProductBySlugResponse, error)
+	GetProducts(ctx context.Context, p GetProductsParams) (*GetProductsResponse, error)
+	CreateNewProduct(ctx context.Context, p CreateNewProductParams) (*CreateNewProductResponse, error)
+	UpdateProductById(ctx context.Context, p UpdateProductByIdParams) (*UpdateProductByIdResponse, error)
+	DeleteProductById(ctx context.Context, p DeleteProductByIdParams) error
 }

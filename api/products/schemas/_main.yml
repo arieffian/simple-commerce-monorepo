@@ -26,6 +26,12 @@ ErrorUnexpected:
 GetProductByIdResponse:
   $ref: "./../operations/products/get_product_by_id/response.yml"
 
+GetProductBySKUResponse:
+  $ref: "./../operations/products/get_product_by_sku/response.yml"
+
+GetProductBySlugResponse:
+  $ref: "./../operations/products/get_product_by_slug/response.yml"
+
 GetProductsResponse:
   $ref: "./../operations/products/get_products/response.yml"
 

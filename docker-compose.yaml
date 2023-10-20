@@ -5,6 +5,11 @@ services:
     ports:
       - "6379:6379"
     restart: always
+  rabbitmq:
+    image: rabbitmq:alpine
+    ports:
+      - "5672:5672"
+    restart: always
   postgres-users:
     image: postgres:alpine
     ports:

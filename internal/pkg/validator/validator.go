@@ -3,7 +3,7 @@ package validator
 import (
 	"context"
 
-	go_validator "github.com/go-playground/validator/v10"
+	validator_pkg "github.com/go-playground/validator/v10"
 )
 
 type ValidatorService interface {
@@ -11,11 +11,11 @@ type ValidatorService interface {
 }
 
 type validatorService struct {
-	validator *go_validator.Validate
+	validator *validator_pkg.Validate
 }
 
 func NewValidatorService() ValidatorService {
-	v := go_validator.New()
+	v := validator_pkg.New()
 
 	return &validatorService{
 		validator: v,

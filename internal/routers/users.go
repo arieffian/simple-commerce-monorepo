@@ -1,26 +1,26 @@
 package routers
 
 import (
+	"github.com/arieffian/simple-commerces-monorepo/internal/config"
+	"github.com/arieffian/simple-commerces-monorepo/internal/database"
 	"github.com/arieffian/simple-commerces-monorepo/internal/handlers"
 	"github.com/arieffian/simple-commerces-monorepo/internal/middlewares"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/redis"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/validator"
 	"github.com/arieffian/simple-commerces-monorepo/internal/repositories"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 type userRouter struct {
 	healthcheck handlers.HealthcheckService
 	users       handlers.UserService
-	apiKey      string
+	cfg         config.Config
 }
 
 type NewUsersRouterParams struct {
-	Db        *gorm.DB
-	Redis     redis.RedisService
-	Validator validator.ValidatorService
-	APIKey    string
+	Db    *database.DbInstance
+	Redis redis.RedisService
+	Cfg   config.Config
 }
 
 func NewUsersRouter(p NewUsersRouterParams) (*userRouter, error) {
@@ -30,23 +30,25 @@ func NewUsersRouter(p NewUsersRouterParams) (*userRouter, error) {
 	userRepo := repositories.NewUserRepository(repositories.NewUserRepositoryParams{
 		Db:    p.Db,
 		Redis: p.Redis,
+		Cfg:   p.Cfg,
 	})
 
 	healthcheckHandler := handlers.NewHealthCheckHandler()
 	userHandler := handlers.NewUserHandler(handlers.NewUserHandlerParams{
 		UserRepo:  userRepo,
 		Validator: validator,
+		Cfg:       p.Cfg,
 	})
 
 	return &userRouter{
 		healthcheck: healthcheckHandler,
 		users:       userHandler,
-		apiKey:      p.APIKey,
+		cfg:         p.Cfg,
 	}, nil
 }
 
 func (r *userRouter) RegisterRoutes(routes *fiber.App) {
-	v1 := routes.Group("/api/v1").Use(middlewares.NewValidateAPIKey(r.apiKey))
+	v1 := routes.Group("/api/v1").Use(middlewares.NewValidateAPIKey(r.cfg.APIKey))
 	v1.Get("/healthcheck", r.healthcheck.HealthCheckHandler)
 
 	users := v1.Group("/users")

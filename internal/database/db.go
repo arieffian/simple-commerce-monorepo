@@ -22,7 +22,11 @@ type dbManager struct {
 	dbConfig DbConfig
 }
 
-func (d *dbManager) CreateDbPostgresClient(ctx context.Context) (*gorm.DB, error) {
+type DbInstance struct {
+	Db *gorm.DB
+}
+
+func (d *dbManager) CreateDbPostgresClient(ctx context.Context) (*DbInstance, error) {
 	db, err := gorm.Open(postgres.Open(d.dbConfig.WriteDsn), &gorm.Config{
 		TranslateError: true,
 		Logger:         logger.Default.LogMode(logger.Info),
@@ -47,10 +51,12 @@ func (d *dbManager) CreateDbPostgresClient(ctx context.Context) (*gorm.DB, error
 			SetMaxOpenConns(200),
 	)
 
-	return db, err
+	return &DbInstance{
+		db,
+	}, err
 }
 
-func (d *dbManager) CreateDbMysqlClient(ctx context.Context) (*gorm.DB, error) {
+func (d *dbManager) CreateDbMysqlClient(ctx context.Context) (*DbInstance, error) {
 	db, err := gorm.Open(mysql.Open(d.dbConfig.WriteDsn), &gorm.Config{
 		TranslateError: true,
 		Logger:         logger.Default.LogMode(logger.Info),
@@ -75,10 +81,12 @@ func (d *dbManager) CreateDbMysqlClient(ctx context.Context) (*gorm.DB, error) {
 			SetMaxOpenConns(200),
 	)
 
-	return db, err
+	return &DbInstance{
+		db,
+	}, err
 }
 
-func (d *dbManager) CreateDbSqliteClient(ctx context.Context) (*gorm.DB, error) {
+func (d *dbManager) CreateDbSqliteClient(ctx context.Context) (*DbInstance, error) {
 	db, err := gorm.Open(sqlite.Open(d.dbConfig.WriteDsn), &gorm.Config{
 		TranslateError: true,
 		Logger:         logger.Default.LogMode(logger.Info),
@@ -87,7 +95,9 @@ func (d *dbManager) CreateDbSqliteClient(ctx context.Context) (*gorm.DB, error) 
 		return nil, err
 	}
 
-	return db, err
+	return &DbInstance{
+		db,
+	}, err
 }
 
 func NewDbManager(dbConfig DbConfig) *dbManager {

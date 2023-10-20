@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/arieffian/simple-commerces-monorepo/internal/config"
 	generated "github.com/arieffian/simple-commerces-monorepo/internal/pkg/generated/users"
 	"github.com/arieffian/simple-commerces-monorepo/internal/pkg/validator"
 	"github.com/arieffian/simple-commerces-monorepo/internal/repositories"
@@ -14,6 +15,7 @@ import (
 type userHandler struct {
 	userRepo  repositories.UserInterface
 	validator validator.ValidatorService
+	cfg       config.Config
 }
 
 var _ UserService = (*userHandler)(nil)
@@ -21,6 +23,7 @@ var _ UserService = (*userHandler)(nil)
 type NewUserHandlerParams struct {
 	UserRepo  repositories.UserInterface
 	Validator validator.ValidatorService
+	Cfg       config.Config
 }
 
 func (h *userHandler) GetUsers(c *fiber.Ctx) error {
@@ -62,6 +65,7 @@ func (h *userHandler) GetUsers(c *fiber.Ctx) error {
 			Id:     user.ID,
 			Name:   user.Name,
 			Email:  user.Email,
+			Type:   generated.UserType(user.Type),
 			Status: generated.UserStatus(user.Status),
 		})
 	}
@@ -101,6 +105,7 @@ func (h *userHandler) CreateUser(c *fiber.Ctx) error {
 		Name:      params.Name,
 		Email:     params.Email,
 		Status:    params.Status,
+		Type:      params.Type,
 		CreatedBy: params.CreatedBy,
 	})
 
@@ -120,6 +125,7 @@ func (h *userHandler) CreateUser(c *fiber.Ctx) error {
 			Id:     user.User.ID,
 			Name:   user.User.Name,
 			Email:  user.User.Email,
+			Type:   generated.UserType(user.User.Type),
 			Status: generated.UserStatus(user.User.Status),
 		},
 	}
@@ -156,6 +162,7 @@ func (h *userHandler) UpdateUserById(c *fiber.Ctx) error {
 		Name:      params.Name,
 		Email:     params.Email,
 		Status:    params.Status,
+		Type:      params.Type,
 		UpdatedBy: params.UpdatedBy,
 	})
 	if err != nil {
@@ -174,6 +181,7 @@ func (h *userHandler) UpdateUserById(c *fiber.Ctx) error {
 			Id:     user.User.ID,
 			Name:   user.User.Name,
 			Email:  user.User.Email,
+			Type:   generated.UserType(user.User.Type),
 			Status: generated.UserStatus(user.User.Status),
 		},
 	}
@@ -185,7 +193,7 @@ func (h *userHandler) DeleteUserById(c *fiber.Ctx) error {
 	id := c.Params("id")
 
 	err := h.userRepo.DeleteUserById(c.Context(), repositories.DeleteUserByIdParams{
-		ID: id,
+		UserId: id,
 	})
 
 	if err != nil {
@@ -223,10 +231,7 @@ func (h *userHandler) GetUserById(c *fiber.Ctx) error {
 		response := generated.GetUserByIdResponse{
 			Code:    int32(status),
 			Message: "OK",
-			Data: &generated.User{
-				Id:   user.User.ID,
-				Name: user.User.Name,
-			},
+			Data:    nil,
 		}
 		return c.Status(int(response.Code)).JSON(response)
 	}
@@ -235,8 +240,11 @@ func (h *userHandler) GetUserById(c *fiber.Ctx) error {
 		Code:    fiber.StatusOK,
 		Message: "OK",
 		Data: &generated.User{
-			Id:   user.User.ID,
-			Name: user.User.Name,
+			Id:     user.User.ID,
+			Email:  user.User.Email,
+			Type:   generated.UserType(user.User.Type),
+			Status: generated.UserStatus(user.User.Status),
+			Name:   user.User.Name,
 		},
 	}
 
@@ -247,5 +255,6 @@ func NewUserHandler(p NewUserHandlerParams) *userHandler {
 	return &userHandler{
 		userRepo:  p.UserRepo,
 		validator: p.Validator,
+		cfg:       p.Cfg,
 	}
 }

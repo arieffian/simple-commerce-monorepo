@@ -4,6 +4,7 @@ required:
   - id
   - name
   - email
+  - type
   - creator
   - status
 properties:
@@ -13,6 +14,9 @@ properties:
     type: string
   email:
     type: string
+  type:
+    type: string
+    enum: [customer, admin]
   creator:
     type: string
   status:
