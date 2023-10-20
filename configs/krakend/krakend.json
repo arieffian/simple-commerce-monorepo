@@ -1,0 +1,304 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "simple-commerces",
+  "timeout": "3000ms",
+  "cache_ttl": "300s",
+  "output_encoding": "json",
+  "endpoints": [
+    {
+      "endpoint": "/v1/users/id/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/users/get-user-by-id/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false,
+          "deny": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{page}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/users/get-users/{page}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false,
+          "is_collection": false,
+          "target": "",
+          "deny": [
+            "id"
+          ]
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/users",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "PUT",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/users/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "PUT",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/users/{id}",
+      "method": "DELETE",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/api/v1/users/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "DELETE",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "edbcb1ae-40c8-4f05-8c82-173c07facde0"
+              }
+            }
+          },
+          "host": [
+            "http://users"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products/id/{id}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products/get-product-by-id/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "eedc6507-b2d4-486e-8507-d42f27bb78a7"
+              }
+            }
+          },
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products/sku/{sku}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products/get-product-by-sku/{sku}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "eedc6507-b2d4-486e-8507-d42f27bb78a7"
+              }
+            }
+          },
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products/slug/{slug}",
+      "method": "GET",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products/get-product-by-slug/{slug}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "GET",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "eedc6507-b2d4-486e-8507-d42f27bb78a7"
+              }
+            }
+          },
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products",
+      "method": "POST",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products",
+          "encoding": "json",
+          "sd": "static",
+          "method": "POST",
+          "extra_config": {
+            "modifier/martian": {
+              "header.Modifier": {
+                "scope": [
+                  "request"
+                ],
+                "name": "X-Api-Key",
+                "value": "eedc6507-b2d4-486e-8507-d42f27bb78a7"
+              }
+            }
+          },
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products/{id}",
+      "method": "PUT",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "PUT",
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    },
+    {
+      "endpoint": "/v1/products/{id}",
+      "method": "DELETE",
+      "output_encoding": "json",
+      "backend": [
+        {
+          "url_pattern": "/v1/api/products/{id}",
+          "encoding": "json",
+          "sd": "static",
+          "method": "DELETE",
+          "host": [
+            "http://products"
+          ],
+          "disable_host_sanitize": false
+        }
+      ]
+    }
+  ]
+}
