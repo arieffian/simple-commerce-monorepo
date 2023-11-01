@@ -1,0 +1,42 @@
+###########################################################################
+# Basic Schemas
+#####################################
+Order:
+  $ref: "./common/order.yml"
+OrderDetail:
+  $ref: "./common/order_detail.yml"
+
+###########################################################################
+# Errors Schemas
+###########################################################################
+ErrorBadRequest:
+  $ref: "./errors/400/response.yml"
+ErrorUnauthorized:
+  $ref: "./errors/401/response.yml"
+ErrorForbidden:
+  $ref: "./errors/403/response.yml"
+ErrorNotFound:
+  $ref: "./errors/404/response.yml"
+ErrorInternalServer:
+  $ref: "./errors/500/response.yml"
+ErrorUnexpected:
+  $ref: "./errors/unexpected/response.yml"
+###########################################################################
+# Category: orders
+###########################################################################
+
+GetOrderByIdResponse:
+  $ref: "./../operations/orders/get_order_by_id/response.yml"
+
+GetOrdersByUserIdResponse:
+  $ref: "./../operations/orders/get_orders_by_user_id/response.yml"
+
+CreateNewOrderRequest:
+  $ref: "./../operations/orders/create_new_order/request.yml"
+CreateNewOrderResponse:
+  $ref: "./../operations/orders/create_new_order/response.yml"
+
+UpdatOrderByIdRequest:
+  $ref: "./../operations/orders/update_order_by_id/request.yml"
+UpdateOrderByIdResponse:
+  $ref: "./../operations/orders/update_order_by_id/response.yml"

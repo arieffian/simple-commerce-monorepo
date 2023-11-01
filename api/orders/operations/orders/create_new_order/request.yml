@@ -1,0 +1,22 @@
+type: object
+required:
+  - user_id
+  - product_ids
+properties:
+  user_id:
+    type: string
+  products:
+    type: array
+    items:
+      type: object
+      properties:
+        product_id:
+          type: string
+        price:
+          type: integer
+          format: int64
+          minimum: 0
+        qty:
+          type: integer
+          format: int32
+          minimum: 0

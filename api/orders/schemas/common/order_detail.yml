@@ -1,0 +1,25 @@
+type: object
+description: Order Detail model.
+required:
+  - product_id
+  - price
+  - qty
+  - sub_total
+  - created_at
+properties:
+  product_id:
+    type: string
+  price:
+    type: integer
+    format: int64
+    minimum: 0
+  sub_total:
+    type: integer
+    minimum: 0
+    format: int64
+  qty:
+    type: integer
+    minimum: 0
+    format: int32
+  created_at:
+    type: string
