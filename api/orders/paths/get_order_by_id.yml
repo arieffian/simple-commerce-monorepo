@@ -1,0 +1,2 @@
+get:
+  $ref: "./../operations/orders/get_order_by_id/operation.yml"

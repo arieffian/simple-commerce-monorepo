@@ -6,7 +6,7 @@ set -e
 SERVICES=(
     "users"
     "products"
-    # "orders"
+    "orders"
     # "payments"
 )
 

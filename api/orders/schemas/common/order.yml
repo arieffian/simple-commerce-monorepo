@@ -1,0 +1,28 @@
+type: object
+description: Order model.
+required:
+  - id
+  - user_id
+  - grand_total
+  - order_details
+  - created_at
+  - status
+properties:
+  id:
+    type: string
+  user_id:
+    type: string
+  grand_total:
+    type: integer
+    minimum: 0
+    format: int64
+  order_details:
+    type: array
+    items:
+      $ref: ./order_detail.yml
+  created_at:
+    type: string
+  status:
+    type: string
+    enum: [pending, paid, canceled]
+

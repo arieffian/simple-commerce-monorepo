@@ -135,3 +135,56 @@ type ProductInterface interface {
 	UpdateProductById(ctx context.Context, p UpdateProductByIdParams) (*UpdateProductByIdResponse, error)
 	DeleteProductById(ctx context.Context, p DeleteProductByIdParams) error
 }
+
+type GetOrderByIdParams struct {
+	OrderId string
+}
+
+type GetOrderByIdResponse struct {
+	Order models.Order
+}
+
+type GetOrdersByUserIdParams struct {
+	UserId string
+	Limit  int
+	Offset int
+}
+
+type GetOrdersByUserIdResponse struct {
+	Orders []models.Order
+}
+
+type CreateNewOrderDetailParams struct {
+	ProductId string `json:"product_id"`
+	SubTotal  uint64 `json:"sub_total"`
+	Qty       uint   `json:"qty"`
+	Price     uint32 `json:"price"`
+}
+
+type CreateNewOrderParams struct {
+	UserId       string                       `json:"user_id"`
+	OrderDetails []CreateNewOrderDetailParams `json:"order_details"`
+	GrandTotal   uint64                       `json:"grand_total"`
+	Status       string                       `json:"status"`
+}
+
+type CreateNewOrderResponse struct {
+	Order models.Order
+}
+
+type UpdateOrderByIdParams struct {
+	ID        string `json:"id"`
+	Status    string `json:"status"`
+	UpdatedBy string `json:"updated_by"`
+}
+
+type UpdateOrderByIdResponse struct {
+	Order models.Order
+}
+
+type OrderInterface interface {
+	GetOrderById(ctx context.Context, p GetOrderByIdParams) (*GetOrderByIdResponse, error)
+	CreateNewOrder(ctx context.Context, p CreateNewOrderParams) (*CreateNewOrderResponse, error)
+	GetOrdersByUserId(ctx context.Context, p GetOrdersByUserIdParams) (*GetOrdersByUserIdResponse, error)
+	UpdateOrderById(ctx context.Context, p UpdateOrderByIdParams) (*UpdateOrderByIdResponse, error)
+}

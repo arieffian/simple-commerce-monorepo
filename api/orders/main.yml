@@ -1,0 +1,32 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0-$REVISION
+  title: OpenAPI Definition for Simple Commerce - Orders service
+  license:
+    name: MIT
+servers:
+  - url: https://arieffian.com/api/v1
+    description: development server
+paths:
+  # Orders
+  /get-orders-by-user-id/{user_id}/{page}:
+    $ref: "./paths/get_orders_by_user_id.yml"
+  /get-order-by-id/{id}:
+    $ref: "./paths/get_order_by_id.yml"
+  /create-new-order:
+    $ref: "./paths/create_new_order.yml"
+  /update-order-by-id/{id}:
+    $ref: "./paths/update_order_by_id.yml"
+
+components:
+  schemas:
+    $ref: "./schemas/_main.yml"
+  responses:
+    $ref: "./responses/_main.yml"
+  parameters:
+    $ref: "./parameters/_main.yml"
+  securitySchemes:
+    $ref: "./security-schemes/_main.yml"
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
